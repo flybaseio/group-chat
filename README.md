@@ -1,5 +1,5 @@
-# Group Chat
-===================
+Group Chat
+----------
 
 A Real-time SMS Group Chat App powered by Data McFly, Twilio and Node.js
 
