@@ -8,7 +8,7 @@ module.exports = {
 	//	Data McFly settings
 	flybase: {
 		api_key: "YOUR-API-KEY",
-		app_name: "YOUR-flybase-APP"
+		app_name: "YOUR-FLYBASE-APP"
 	},
 	//	Username and password for admin section.
 	un: 'admin',
