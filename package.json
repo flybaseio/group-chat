@@ -1,31 +1,28 @@
 {
-	"name": "sms-contact-center",
-	"version": "0.0.1",
-	"description": "SMS Contact Center powered by Data McFly, Twilio and Node.js",
-	"main": "app.js",
-	"repository": "https://github.com/DataMcFly/sms-contact",
-	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
-	},
-	"keywords": [
-		"twilio",
-		"data mcfly",
-		"sms"
-	],
-	"author": "Roger Stringer",
-	"license": "MIT",
-	"dependencies": {
-		"twilio": "~1.6.0",
-	    "ejs": "~0.8.5",
-		"express": "~3.4.8",
-		"datamcfly": "~1.5.2",
-		"node-buzz": "~1.1.0",
-		"moment": "~2.5.1",
-		"less-middleware": "~0.2.1-beta",
-		"body-parser" : "~1.4.2",
-		"method-override" : "~2.0.2"	
-	},
-	"engines": {
-		"node": "0.10.26"
-	}
+  "name": "group-chat",
+  "version": "0.0.1",
+  "description": "SMS Group Chat powered by Flybase, Twilio and Node.js",
+  "main": "app.js",
+  "repository": "https://github.com/flybaseio/group-chat",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "twilio",
+    "flybase",
+    "sms"
+  ],
+  "author": "Roger Stringer",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "~1.16.0",
+    "ejs": "~2.5.5",
+    "express": "~4.14.0",
+    "flybase": "^1.8.2",
+    "less-middleware": "~2.2.0",
+    "method-override": "~2.3.7",
+    "moment": "~2.17.1",
+    "node-buzz": "~1.1.0",
+    "twilio": "~2.11.1"
+  }
 }

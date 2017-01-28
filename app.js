@@ -10,28 +10,27 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({	extended: true	}));
 app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
- 
+
 var port = process.env.PORT || 8080; // set our port
 
 var twilio = require('twilio');
 var client = twilio(config.twilio.sid, config.twilio.token );
 
-var datamcfly = require('datamcfly');
-var messagesRef = datamcfly.init(config.datamcfly.app_name, "messages", config.datamcfly.api_key);
-var groupRef = datamcfly.init(config.datamcfly.app_name, "groups", config.datamcfly.api_key);
-
+var flybase = require('flybase');
+var messagesRef = flybase.init(config.flybase.app_name, "messages", config.flybase.api_key);
+var groupRef = flybase.init(config.flybase.app_name, "groups", config.flybase.api_key);
 
 // listen for updates from Data McFly routes =========================================================
 
 //	when a new message is added to the Data McFly app, send it via Twilio...
 messagesRef.on("added", function (data ){
 	var snapshot = data.value();
-	sendMessage( 
+	sendMessage(
 		snapshot.groupNumber,
 		snapshot.fromName,
 		snapshot.fromNumber,
 		snapshot.message
-	);	
+	);
 });
 
 groupRef.on("added", function ( data ){
@@ -78,7 +77,7 @@ function sendMessage( group_number, from_name, from_number, message ){
 			data.forEach( function( snapshot ){
 				var member = snapshot.value();
 				client.sendMessage( {
-					to:member.memberNumber, 
+					to:member.memberNumber,
 					from:group_number,
 					body:msg
 				}, function( err, data ) {
@@ -128,11 +127,11 @@ var auth = express.basicAuth(config.un, config.pw);
 // route to handle all frontend requests, with a password to protect unauthorized access....
 app.get('*', auth, function(req, res) {
 	res.render('index', {
-		api_key:config.datamcfly.api_key,
-		app_name:config.datamcfly.app_name,
+		api_key:config.flybase.api_key,
+		app_name:config.flybase.app_name,
 		group_number:config.twilio.from_number
 	});
-}); 
+});
 
 var server = app.listen(port, function() {
 	console.log('Listening on port %d', server.address().port);

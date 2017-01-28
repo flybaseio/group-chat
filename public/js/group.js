@@ -2,11 +2,11 @@ var groupManager = function(api_key, app_name, group_number) {
 //	store the group number
 	this.group_number = group_number;
 //	reference to our messages collection...
-	this.messagesRef = new DataMcFly(api_key, app_name, "messages");
+	this.messagesRef = new Flybase(api_key, app_name, "messages");
 
 //	reference to our group collection...
-	this.groupRef = new DataMcFly(api_key, app_name, "groups");
-	
+	this.groupRef = new Flybase(api_key, app_name, "groups");
+
 	this.group_members = [];
 };
 groupManager.prototype.start = function(){
@@ -14,10 +14,10 @@ groupManager.prototype.start = function(){
 	var _this = this;
 
 	this.groupRef.on("value", function( data ){
-		if( data.count() ){		
+		if( data.count() ){
 			data.forEach( function( snapshot ){
 				var member = snapshot.value();
-				_this.group_members[member._id] = member;				
+				_this.group_members[member._id] = member;
 			});
 		}
 		_this.displayGroup();
@@ -62,18 +62,18 @@ console.log( member );
 //	list any existing chat message
 	this.messagesRef.on('value', function (data) {
 		if( data.count() ){
-			data.forEach( function(message){				
+			data.forEach( function(message){
 				_this.displayChatMessage(message.value() );
 			});
 		}
-	});		
+	});
 //	listen for incoming chat messages
 	this.messagesRef.on('added', function (data) {
 		var message = data.value();
 		_this.displayChatMessage( message );
 	});
 
-//	listen for outgoing chat messages	
+//	listen for outgoing chat messages
 	$('#msg_form').submit( function(e){
 		e.preventDefault();
 		var message = {

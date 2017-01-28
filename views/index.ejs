@@ -8,11 +8,11 @@
 	<link rel="stylesheet" type="text/css" href="/css/style.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-	<script src="https://cdn.datamcfly.com/DataMcFly.js?20150217"></script>
-	<script src="https://cdn.datamcfly.com/libs/phone.js"></script>
+	<script src="https://cdn.flybase.io/flybase.js?latest"></script>
+	<script src="https://cdn.flybase.io/libs/phone.js"></script>
 	<script src="/js/group.js"></script>
-	
-	<title>Group Chat, powered by Data McFly and Twilio</title>
+
+	<title>Group Chat, powered by Flybase and Twilio</title>
 </head>
 <body>
 	<div class='container'>
@@ -55,7 +55,7 @@
 	</div>
 	<script>
 		$(function(){
-//			inititialize our Data McFly object
+//			inititialize our Flybase object
 			var myGroupManager = new groupManager( "<%= api_key %>", "<%= app_name %>", "<%= group_number %>");
 			myGroupManager.start();
 		});

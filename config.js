@@ -6,9 +6,9 @@ module.exports = {
 		from_number: "YOUR-NUMBER"
 	},
 	//	Data McFly settings
-	datamcfly: {
+	flybase: {
 		api_key: "YOUR-API-KEY",
-		app_name: "YOUR-DATAMCFLY-APP"
+		app_name: "YOUR-flybase-APP"
 	},
 	//	Username and password for admin section.
 	un: 'admin',
