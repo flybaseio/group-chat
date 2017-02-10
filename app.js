@@ -29,7 +29,8 @@ messagesRef.on("added", function (data ){
 		snapshot.groupNumber,
 		snapshot.fromName,
 		snapshot.fromNumber,
-		snapshot.message
+		snapshot.message,
+		snapshot.media || ""
 	);
 });
 
@@ -43,6 +44,7 @@ groupRef.on("added", function ( data ){
 		fromName:"Admin",
 		fromNumber:"",
 		message:msg,
+		media:"",
 		fromCity:"",
 		fromState:"",
 		fromCountry:"",
@@ -61,6 +63,7 @@ groupRef.on("removed", function ( data ){
 		fromName:"Admin",
 		fromNumber:"",
 		message:msg,
+		media:"",
 		fromCity:"",
 		fromState:"",
 		fromCountry:"",
@@ -70,18 +73,22 @@ groupRef.on("removed", function ( data ){
 });
 
 //	broadcast a message to the group
-function sendMessage( group_number, from_name, from_number, message ){
+function sendMessage( group_number, from_name, from_number, message, media ){
 	var msg = from_name + ": " + message;
 	groupRef.where( {"memberNumber":{"$not":from_number}} ).on( "value", function ( data ){
 		if( data.count() ){
 			data.forEach( function( snapshot ){
 				var member = snapshot.value();
-				client.sendMessage( {
+
+				var msgObj = {
 					to:member.memberNumber,
 					from:group_number,
 					body:msg
-				}, function( err, data ) {
-				});
+				};
+				if( media !== "" ){
+					msgObj.mediaUrl = media;
+				}
+				client.sendMessage( msgObj, function( err, data ) {});
 			});
 		}
 	});
@@ -92,6 +99,7 @@ function sendMessage( group_number, from_name, from_number, message ){
 
 //	listen for incoming sms messages
 app.post('/message', function (request, response) {
+
 	groupRef.where( {"memberNumber":request.param('From')} ).limit(1).on( "value", function ( data ){
 		if( data.count() ){
 			data.forEach( function( snapshot ){
@@ -103,6 +111,7 @@ app.post('/message', function (request, response) {
 					fromName:member.memberName,
 					fromNumber:request.param('From'),
 					message:request.param('Body'),
+					media:"",
 					fromCity:request.param('FromCity'),
 					fromState:request.param('FromState'),
 					fromCountry:request.param('FromCountry'),
@@ -111,6 +120,33 @@ app.post('/message', function (request, response) {
 			});
 		}
 	});
+
+	var numMedia = parseInt( request.param('NumMedia') );
+	if (numMedia > 0) {
+		for (i = 0; i < numMedia; i++) {
+			var mediaUrl = request.param('MediaUrl' + i);
+			groupRef.where( {"memberNumber":request.param('From')} ).limit(1).on( "value", function ( data ){
+				if( data.count() ){
+					data.forEach( function( snapshot ){
+						var member = snapshot.value();
+						messagesRef.push({
+							sid: request.param('MessageSid'),
+							type:'text',
+							tstamp: new Date().toLocaleString(),
+							fromName:member.memberName,
+							fromNumber:request.param('From'),
+							message:"",
+							media:mediaUrl,
+							fromCity:request.param('FromCity'),
+							fromState:request.param('FromState'),
+							fromCountry:request.param('FromCountry'),
+							groupNumber:request.param('To')
+						});
+					});
+				}
+			});
+		}
+	}
 	var resp = new twilio.TwimlResponse();
 	resp.message('Message received.');
 	response.writeHead(200, {
