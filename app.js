@@ -75,7 +75,7 @@ groupRef.on("removed", function ( data ){
 //	broadcast a message to the group
 function sendMessage( group_number, from_name, from_number, message, media ){
 	var msg = from_name + ": " + message;
-	groupRef.where( {"memberNumber":{"$not":from_number}} ).on( "value", function ( data ){
+	groupRef.where( {"memberNumber":{"$not":from_number}} ).limit(100).on( "value", function ( data ){
 		if( data.count() ){
 			data.forEach( function( snapshot ){
 				var member = snapshot.value();
